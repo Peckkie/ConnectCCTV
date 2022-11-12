@@ -56,3 +56,6 @@ def connectCCTV():
         cv2.destroyAllWindows() #  Simply destroys all the windows we created
 
     return path
+
+if __name__ == '__main__':
+    connectCCTV()
