@@ -4,17 +4,19 @@ import pandas as pd
 import cv2
 import os
 import datetime
+import requests
+import json
 
 save_interval = 2 # The default value for setting the number of seconds of the desired image
 
-name = 'CCTV_IP_111' # [1] Setting name folder for save save frame in subfolder
-name = os.path.join(os.getcwd(), name) # Create head path name for save image
+folder_res = 'CCTV_IP_111' # [1] Setting name folder for save save frame in subfolder
+name = os.path.join('/home/concealg/ConGUN-project/ConGUN-pose-tracking-api/static', folder_res) # Create head path name for save image
 print("ALl logs saved in dir:", name)
 os.makedirs(name, exist_ok=True) # Create head path
 
-cap = cv2.VideoCapture("rtsp://admin:admin@192.168.2.154/defaultPrimary?/streamType=u/")
+#cap = cv2.VideoCapture("rtsp://admin:admin@192.168.2.154/defaultPrimary?/streamType=u/")
 # cap = cv2.VideoCapture("rtsp://admin:Abc12345@192.168.2.169/Streaming/Channels/101/") #2
-# cap = cv2.VideoCapture("rtsp://admin:Abc12345@192.168.2.194/Streaming/Channels/101/")#6
+cap = cv2.VideoCapture("rtsp://admin:Abc12345@192.168.2.194/Streaming/Channels/101/")#6
 # cap = cv2.VideoCapture("rtsp://admin:Abc12345@192.168.2.166/Streaming/Channels/101/") #3
 # cap = cv2.VideoCapture("rtsp://admin:Abc12345@192.168.2.165/Streaming/Channels/101/")#4
 # cap = cv2.VideoCapture("rtsp://admin:Abc12345@192.168.2.125/Streaming/Channels/101/")#5
@@ -45,6 +47,14 @@ while True: # Endless loop repeat
                     cv2.imwrite(path + '/' + str(i) + '.jpg', frame) # Save image
                     
                     if count % (fps * save_interval) == 0: # Condition keep image every 2 sec.
+                        
+#                         folder_result = path
+                        url = 'http://127.0.0.1:5000/request'
+                        myobj = {'path' :path}
+                        x = requests.post(url, data = json.dumps(myobj))
+                        print(x.text)
+                        
+                        
                         date = datetime.datetime.now() # Next timer
                         dir = str(date.strftime("%Y"))+str(date.strftime("%m"))+str(date.strftime("%d"))+'_'+str(date.strftime("%H-%M-%S")) # Folder name keep image
                         path = name + '/' + str(dir) # Create name path for keep image
@@ -52,12 +62,14 @@ while True: # Endless loop repeat
                         # print(path) # Show sub path
                     
                     count += 1
-        # # call api
-        # if _name_ == "_main_":           
-        #     url = 'http://127.0.0.1:5000/request'
-        #     myobj = {'path' :path}
-        #     x = requests.post(url, data = json.dumps(myobj))
-        #     print(x.text)
+        # call api
+        
+#         folder_result = folder_res+'/' + str(dir)
+#         folder_result = '/home/concealg/ConGUN-project/ConGUN-pose-tracking-api/static/CCTV_IP_111/20221114_15-34-43'
+#         url = 'http://127.0.0.1:5000/request'
+#         myobj = {'path' :folder_result}
+#         x = requests.post(url, data = json.dumps(myobj))
+#         print(x.text)
 
     cap.release() # Release the camera when it's done.
     cv2.destroyAllWindows() #  Simply destroys all the windows we created
