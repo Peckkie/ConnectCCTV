@@ -20,3 +20,17 @@ cap = cv2.VideoCapture("rtsp://{ADMIN}:{PASSWORD}@{IP CAMERA}:554/Streaming/Chan
 4. แทนค่าจำนวนเฟรมต่อวินาทีทั้งหมดที่ต้องการในบรรทัดนี้
 	for i in range(1, 41):
 	โดยลงแทนค่าที่ 41 โดยคำนวณจาก (fps*จำนวนวินาทีที่ต้องการ) + 1
+
+----
+
+git clone https://github.com/ChainSirirat/ConnectCCTV.git
+
+conda create -n guts python=3.7 -y
+conda activate guts
+
+conda install numpy 
+conda install pandas
+pip install opencv-python
+
+pip install flask
+pip install requests
